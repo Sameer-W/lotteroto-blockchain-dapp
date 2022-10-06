@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Celo Lottery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="shortcut icon" type="image/png" href="celo-logo.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Raleway", sans-serif;
+        text-rendering: optimizeLegibility;
+        color: #202020;
+      }
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      p {
+        padding: 0;
+        margin: 0;
+      }
+      :focus-visible {
+        outline: none;
+      }
+
+      .hero {
+        background: #69cc86;
+        background: linear-gradient(153deg, #69cc86 0%, #8dfaae 100%);
+      }
+
+      .container {
+        padding: 2rem;
+      }
+
+      .light {
+        color: #fff;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      @media (min-width: 700px) {
+        .container {
+          padding: 2rem 8rem;
+        }
+      }
+
+      @media (min-width: 1000px) {
+        .container {
+          padding: 2rem 15rem;
+        }
+      }
+
+      .title {
+        font-weight: bold;
+        font-size: 3.5rem;
+        padding: 1rem 0;
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        padding: 0 0 1rem 0;
+      }
+
+      .balance-container {
+        background-color: #fff;
+        border-bottom-left-radius: 4px;
+        position: absolute;
+        padding: 1rem;
+        right: 0;
+        top: 0;
+        font-weight: bolder;
+      }
+
+      button {
+        border: 0;
+        background: #94ffb4;
+        padding: 0.5rem 3rem;
+        border-radius: 3px;
+        margin: 0.5rem 0;
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+      }
+
+      .field {
+        margin: 0.5rem 0;
+        display: flex;
+        background-color: #f8f8f8;
+        padding: 1rem;
+        font-size: 1.3rem;
+        overflow: hidden;
+      }
+
+      .label {
+        margin-right: 0.5rem;
+      }
+      input {
+        flex-grow: 1;
+        border: 0;
+        border-bottom: 2px solid #94ffb4;
+        background: transparent;
+        font-size: 1.3rem;
+      }
+
+      #balance {
+        color: #f5cd6f;
+      }
+
+      .tabs-container {
+        width: 100%;
+      }
+
+      .tab {
+        width: 49%;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .lottery-container {
+        display: flex;
+        flex-direction: column;
+        background-color: #dbffe6;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow: scroll;
+        border-left: 5px solid #69cc86;
+        margin-bottom: 2rem;
+      }
+
+      .lottery-header {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .lottery-body {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 1rem 0;
+      }
+
+      .lottery-footer {
+        display: flex;
+      }
+
+      .buy-lottery-btn {
+        background-color: #f5cd6f;
+      }
+
+      .declare-winner-lottery-btn {
+        background-color: #f5a06f;
+      }
+
+      #spinner-loading {
+        width: 100vw;
+        height: 100vh;
+        background-color: #0003;
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .lds-dual-ring {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #spinner-label {
+        text-align: center;
+        font-weight: bolder;
+        font-size: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="container">
+        <p class="title light">Lotteroto</p>
+        <p class="subtitle light">
+          A lottery platform built on top of Celo Blockchain
+        </p>
+        <p class="balance-container">
+          <span>My balance</span>
+          <span id="balance">Loading...</span>
+        </p>
+        <div class="tabs-container">
+          <button id="seeLotteriesTab" class="button tab">See Lotteries</button>
+          <button id="createLotteryTab" class="button tab">
+            Create a new Lottery
+          </button>
+        </div>
+      </div>
+    </div>
+    <section id="create-lottery-form" class="container hidden">
+      <p class="subtitle center">Create a new Lottery</p>
+      <div class="field">
+        <label class="label">Lottery name</label>
+        <input id="name" class="input" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label class="label">Ticket price (cUSD)</label>
+        <input
+          id="ticketPrice"
+          class="input"
+          type="number"
+          min="1"
+          autocomplete="off"
+        />
+      </div>
+      <button id="createLotteryButton" class="button">Create</button>
+    </section>
+    <section class="container" id="lotteries-list">
+      <p class="subtitle center">Lotteries</p>
+      <div id="lotteries">
+        <p class="subtitle center">Loading Lotteries...</p>
+      </div>
+    </section>
+    <div id="spinner-loading" class="hidden">
+      <div class="lds-dual-ring"></div>
+      <br />
+      <p class="light" id="spinner-label">Loading...</p>
+    </div>
+  <script type="text/javascript" src="main.js"></script></body>
+</html>

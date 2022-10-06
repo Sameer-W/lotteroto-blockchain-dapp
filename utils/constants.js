@@ -1,0 +1,11 @@
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const ERC20_DECIMALS = 18;
+const CeloLotteryContractAddress = "0x8547aA5EE21B1F457edd2371012b9174F145788b";
+const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
+
+export {
+  ZERO_ADDRESS,
+  CeloLotteryContractAddress,
+  cUSDContractAddress,
+  ERC20_DECIMALS,
+};
